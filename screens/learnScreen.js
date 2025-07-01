@@ -10,6 +10,8 @@ export default function LearnScreen() {
   const swiperRef = useRef(null);
   const [words, setWords] = useState([{ "en": "phone", "id": 1, "tr": "telefon" }, { "en": "bag", "id": 2, "tr": "çanta" }, { "en": "cup", "id": 3, "tr": "bardak" }, { "en": "keyboard", "id": 4, "tr": "klavye" }]);
   const [score,setScore]= useState(0);
+  const [leftText,setLeftText] = useState("araba");
+  const [rightText, setRightText] = useState("bilgisayar");
   useEffect(() => {
     async function fetchWords() {
       const result = await db.getAllAsync(`SELECT * FROM words`);
@@ -32,7 +34,9 @@ export default function LearnScreen() {
   }
   return (
     <View style={styles.container}>
+      
        <Text style={styles.infoText}>swipe left or right</Text>
+       
       <Swiper
         cards={words}
         ref={swiperRef}
@@ -58,6 +62,17 @@ export default function LearnScreen() {
       <Text style={styles.yourScoreHeader}>Your Score</Text>
       <Text style={styles.score}>{score}</Text>
       <Text style={styles.infoText}>swipe left or right</Text>
+      <View style={styles.leftTextContainer}>
+        
+        <Text style={styles.leftText}>{leftText}</Text>
+        <Text style={styles.leftText}>{'   <'}</Text>
+      </View>
+      
+      <View style={styles.rightTextContainer}>
+        
+        <Text style={styles.rightText}>{rightText}</Text>
+        <Text style={styles.rightText}>{'      >'}</Text>
+      </View>
     </View>
   )
 }
@@ -90,8 +105,8 @@ const styles = StyleSheet.create({
     color: "white",
   },
   infoText:{
-    fontSize: 16,
-    color: 'gray',
+    fontSize: 14,
+    color: '#B6B6B6',
     alignSelf:'center',
     position: 'absolute',
     marginTop: '55%',
@@ -108,8 +123,31 @@ const styles = StyleSheet.create({
     fontSize: 24,
     color: "#115273",
     alignSelf:'center',
- position: 'absolute',
+    position: 'absolute',
      marginTop: '30%',
 
     },
+    leftText:{
+      fontSize: 20,
+      color:"#115273",
+
+    },
+    leftTextContainer:{
+      position: 'absolute',
+      display: 'flex',
+      marginTop: '45%',
+      marginLeft: 20,
+    },
+    rightText:{
+      fontSize: 20,
+      color:"#115273",
+      
+    },
+    rightTextContainer:{
+        position: 'absolute',
+      display: 'flex',
+      marginTop: '45%',
+      right: 0,
+      marginRight: 20,
+    }
 })
