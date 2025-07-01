@@ -1,7 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, Button } from 'react-native';
 import Swiper from 'react-native-deck-swiper';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef,useLayoutEffect } from 'react';
 import React from 'react'
 import { useSQLiteContext } from 'expo-sqlite';
 
@@ -12,26 +12,80 @@ export default function LearnScreen() {
   const [score,setScore]= useState(0);
   const [leftText,setLeftText] = useState("araba");
   const [rightText, setRightText] = useState("bilgisayar");
-  useEffect(() => {
+
+  const [randomWord,setRandomWord] = useState('test_random');
+  const [correctWord, setCorrectWord] = useState('test_correct');
+  const [correctDirection, setCorrectDirection] = useState("left");
+  useLayoutEffect(() => {
     async function fetchWords() {
       const result = await db.getAllAsync(`SELECT * FROM words`);
       console.log("DB CONTENT:", result);
       setWords(result);
-
+      setWordsTexts(result,0);
     }
 
     fetchWords();
   }, [])
-  function onSwipedLeft() {
+  function onSwipedLeft(index) {
+    if(correctDirection==="left"){
+      console.log("CORRECT!");
+      setScore(score+1);
+
+    }
+    setWordsTexts(words,index);
     console.log("Swiped Left!");
-
-
-
   }
-  function onSwipedRight() {
+  function onSwipedRight(index) {
+    if(correctDirection==="right"){
+      console.log("CORRECT!");
+      setScore(score+1);
+      
+    }
+    setWordsTexts(words,index);
     console.log("Swiped Right");
 
   }
+   function setWordsTexts(words,index){
+    const answers = getTRWordsByID(words,index+1);
+    console.log("Correct answer: "+ correctWord);
+      setRandomWord(answers.random);
+      setCorrectWord(answers.correct);
+      console.log("Correct answer: "+ correctWord);
+      // 0: left --- 1:right
+      const direction = Math.round(Math.random());
+      if(direction === 0){
+          setCorrectDirection("left");
+          setLeftText(correctWord);
+          setRightText(randomWord);
+      } 
+      else{
+          setCorrectDirection("right");
+          setLeftText(randomWord);
+          setRightText(correctWord);
+      } 
+  }
+  function getTRWordsByID(words, targetId) {
+  
+  const targetWord = words.find(word => word.id === targetId);
+
+  if (!targetWord) {
+    return { error: "Belirtilen id'ye sahip kelime bulunamadı." };
+  }
+
+  const otherWords = words.filter(word => word.id !== targetId);
+
+  if (otherWords.length === 0) {
+    return { error: "Başka kelime yok." };
+  }
+
+  const randomIndex = Math.floor(Math.random() * otherWords.length);
+  const randomWord = otherWords[randomIndex];
+
+  return {
+    correct: targetWord.tr,
+    random: randomWord.tr,
+  };
+}
   return (
     <View style={styles.container}>
       
@@ -50,13 +104,13 @@ export default function LearnScreen() {
         keyExtractor={(item) => item.id.toString()}
         verticalSwipe={false}
         onSwiped={(cardIndex) => { console.log(cardIndex) }}
-        onSwipedLeft={onSwipedLeft}
-        onSwipedRight={onSwipedRight}
+        onSwipedLeft={(cardIndex) => {onSwipedLeft(cardIndex)}}
+        onSwipedRight={(cardIndex) => {onSwipedRight(cardIndex)}}
         onSwipedAll={() =>{console.log("All cards swiped!")}}
         cardIndex={0}
         backgroundColor={'#FFFFFF'}
+        infinite={true}
         stackSize={4}>
-        
         
       </Swiper>
       <Text style={styles.yourScoreHeader}>Your Score</Text>
