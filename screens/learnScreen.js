@@ -16,63 +16,74 @@ export default function LearnScreen() {
   const [randomWord,setRandomWord] = useState('test_random');
   const [correctWord, setCorrectWord] = useState('test_correct');
   const [correctDirection, setCorrectDirection] = useState("left");
+
+  const [counter,setCounter] = useState(0);
   useLayoutEffect(() => {
     async function fetchWords() {
       const result = await db.getAllAsync(`SELECT * FROM words`);
       console.log("DB CONTENT:", result);
-      setWords(result);
-      setWordsTexts(result,0);
-    }
+       console.log("first word before setting:", words[0].tr);
+      await setWords(result);
+       
+     // await setWordsTexts(result[0]);
+    } 
 
     fetchWords();
-  }, [])
-  function onSwipedLeft(index) {
+    console.log("Correct answer: "+ correctWord);
+  },[])
+  useEffect(()=>{
+    setWordsTexts(words[0]);
+    console.log("first word after setting:", words[0].tr);
+  },[words])
+  function onSwipedLeft(word) {
     if(correctDirection==="left"){
       console.log("CORRECT!");
       setScore(score+1);
 
     }
-    setWordsTexts(words,index);
+    setWordsTexts(word);
     console.log("Swiped Left!");
   }
-  function onSwipedRight(index) {
+  function onSwipedRight(word) {
+
     if(correctDirection==="right"){
       console.log("CORRECT!");
       setScore(score+1);
       
     }
-    setWordsTexts(words,index);
+    setWordsTexts(word);
     console.log("Swiped Right");
 
   }
-   function setWordsTexts(words,index){
-    const answers = getTRWordsByID(words,index+1);
-    console.log("Correct answer: "+ correctWord);
-      setRandomWord(answers.random);
-      setCorrectWord(answers.correct);
-      console.log("Correct answer: "+ correctWord);
+  async function setWordsTexts(word){
+    const answers = await getWordAnswers(word);
+    
+    
+      await setRandomWord(answers.random);
+      await setCorrectWord(answers.correct);
+      
       // 0: left --- 1:right
       const direction = Math.round(Math.random());
       if(direction === 0){
-          setCorrectDirection("left");
-          setLeftText(correctWord);
-          setRightText(randomWord);
+          await setCorrectDirection("left");
+          await setLeftText(answers.correct);
+          await setRightText(answers.random);
       } 
       else{
-          setCorrectDirection("right");
-          setLeftText(randomWord);
-          setRightText(correctWord);
+          await setCorrectDirection("right");
+          await setLeftText(answers.random);
+          await setRightText(answers.correct);
       } 
   }
-  function getTRWordsByID(words, targetId) {
+  function getWordAnswers(word) {
   
-  const targetWord = words.find(word => word.id === targetId);
+  const targetWord = words.find(word1 => word1.id === word.id);
 
   if (!targetWord) {
     return { error: "Belirtilen id'ye sahip kelime bulunamadı." };
   }
 
-  const otherWords = words.filter(word => word.id !== targetId);
+  const otherWords = words.filter(word1 => word1.id !== word.id);
 
   if (otherWords.length === 0) {
     return { error: "Başka kelime yok." };
@@ -103,9 +114,9 @@ export default function LearnScreen() {
         }}
         keyExtractor={(item) => item.id.toString()}
         verticalSwipe={false}
-        onSwiped={(cardIndex) => { console.log(cardIndex) }}
-        onSwipedLeft={(cardIndex) => {onSwipedLeft(cardIndex)}}
-        onSwipedRight={(cardIndex) => {onSwipedRight(cardIndex)}}
+        onSwiped={() => {setCounter(counter+1) }}
+        onSwipedLeft={(cardIndex) => {onSwipedLeft(words[cardIndex+1])}}
+        onSwipedRight={(cardIndex) => {onSwipedRight(words[cardIndex+1])}}
         onSwipedAll={() =>{console.log("All cards swiped!")}}
         cardIndex={0}
         backgroundColor={'#FFFFFF'}
