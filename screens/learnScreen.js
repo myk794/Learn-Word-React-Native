@@ -6,6 +6,7 @@ import React from 'react'
 import { useSQLiteContext } from 'expo-sqlite';
 import { LinearGradient } from 'expo-linear-gradient';
 import HomeButton from './components/HomeButton';
+import { useNavigation } from '@react-navigation/native';
 export default function LearnScreen() {
   const db = useSQLiteContext();
   const swiperRef = useRef(null);
@@ -26,6 +27,11 @@ export default function LearnScreen() {
   const [correctDirection, setCorrectDirection] = useState("left");
 
   const [counter, setCounter] = useState(0);
+
+   const navigation = useNavigation();
+      const homeButtonHandler = () =>{
+          navigation.navigate('HomeScreen');
+      }
   useLayoutEffect(() => {
     async function fetchWords() {
       const result = await db.getAllAsync(`SELECT * FROM words`);
@@ -156,7 +162,7 @@ export default function LearnScreen() {
         <Text style={styles.rightText}>{rightText}</Text>
         <Text style={styles.rightText}>{'      >'}</Text>
       </View>
-      <TouchableOpacity style={styles.homeButton}>
+      <TouchableOpacity style={styles.homeButton} onPress={homeButtonHandler}>
         <Text style={styles.buttonText}>HOME</Text>
       </TouchableOpacity>
     </View>
