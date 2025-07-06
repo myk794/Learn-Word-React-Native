@@ -10,10 +10,12 @@ import { SQLiteProvider } from 'expo-sqlite';
 export default function App() {
   
   return (
-      <SQLiteProvider databaseName="words.db">
-           <LearnScreen/>
+       <SQLiteProvider databaseName="words.db">
+
+         <LearnScreen/>
+       </SQLiteProvider>
  
-      </SQLiteProvider>
+      
    
   );
 }

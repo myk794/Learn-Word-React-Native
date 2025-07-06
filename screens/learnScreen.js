@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Button } from 'react-native';
+import { StyleSheet, Text, View, Button,TouchableOpacity } from 'react-native';
 import Swiper from 'react-native-deck-swiper';
 import { useState, useEffect, useRef, useLayoutEffect } from 'react';
 import React from 'react'
@@ -102,12 +102,13 @@ export default function LearnScreen() {
     };
   }
   return (
+   
+
+    
     <View style={styles.container}>
-      
+
       <Text style={styles.infoText}>swipe left or right</Text>
-<View style={styles.homeButton}>
-        <Text>HomeButton</Text>
-      </View>
+
       <Swiper
         cards={words}
         ref={swiperRef}
@@ -155,23 +156,34 @@ export default function LearnScreen() {
         <Text style={styles.rightText}>{rightText}</Text>
         <Text style={styles.rightText}>{'      >'}</Text>
       </View>
-      
+      <TouchableOpacity style={styles.homeButton}>
+        <Text style={styles.buttonText}>HOME</Text>
+      </TouchableOpacity>
     </View>
+    
   )
 }
 
 const styles = StyleSheet.create({
   container: {
     backgroundColor: 'red',
-
+    flex: 1,
   },
+  buttonText:{
+    color: 'white',
+    
+    fontSize: 20,
+  },  
   homeButton: {
 
     position: 'absolute',
-    display: 'flex',
-    
+    bottom: '10%',
     alignSelf: 'center',
-    backgroundColor: 'red',
+    alignItems: 'center',
+    backgroundColor: '#115273',
+    width: '40%',
+    padding: 5,
+    borderRadius: 14,
   },
   card: {
 

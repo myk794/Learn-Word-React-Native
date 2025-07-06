@@ -11,11 +11,6 @@ export default function HomeButton() {
 
 const styles = StyleSheet.create({
 container:{
-    position: 'absolute',
-    bottom: 20,
-    width: 200,
-    height: 50,
-    marginBottom:'auto',
-    backgroundColor: '#115273',
+   
 },
 })
