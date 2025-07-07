@@ -1,24 +1,24 @@
 import { useState } from "react";
-import {View,TextInput, Button, StyleSheet,Alert} from 'react-native';
-import {useSQLiteContext} from 'expo-sqlite';
+import { View, TextInput, Button, StyleSheet, Alert, TouchableOpacity, Text } from 'react-native';
+import { useSQLiteContext } from 'expo-sqlite';
 
 const AddForm = () => {
-    const [form,setForm] = useState({
+    const [form, setForm] = useState({
         en: '',
         tr: ''
     });
 
     const db = useSQLiteContext();
-    const handleSubmit = async () =>{
+    const handleSubmit = async () => {
         try {
-            if(!form.en || !form.tr){
+            if (!form.en || !form.tr) {
                 throw new Error('All fields are required!');
             }
             await db.runAsync(
                 'INSERT INTO words (en,tr) VALUES (?,?)',
-                [form.en,form.tr]
+                [form.en, form.tr]
             );
-            Alert.alert('Success','Word Added Successfully!');
+            Alert.alert('Success', 'Word Added Successfully!');
             setForm({
                 en: '',
                 tr: ''
@@ -29,42 +29,98 @@ const AddForm = () => {
         }
     };
 
-    return(
-        <View style={styles.container}>
-            <TextInput
-            style={styles.input}
-            placeholder="English"
-            value={form.en}
-            onChangeText={(text)=> setForm({...form,en:text})}/>
-            <TextInput
-            style={styles.input}
-            placeholder="Turkish"
-            value={form.tr}
-            onChangeText={(text)=> setForm({...form,tr:text})}/>
-            <Button title="Add Word" onPress={handleSubmit}/>
+    return (
+        <View style={styles.main}>
+            <Text style={styles.header}>Add Word</Text>
+            <View style={styles.container}>
+                <Text style={styles.inputHeader}>English</Text>
+                <TextInput
+                    style={styles.input}
+                    placeholder="Enter text..."
+                    value={form.en}
+                    onChangeText={(text) => setForm({ ...form, en: text })} />
+                <Text style={styles.inputHeader}>Turkish</Text>
+                <TextInput
+                    style={styles.input}
+                    placeholder="Enter text..."
+                    value={form.tr}
+                    onChangeText={(text) => setForm({ ...form, tr: text })} />
+
+            </View>
+
+            <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
+                <Text style={styles.buttonText}>ADD</Text>
+            </TouchableOpacity>
         </View>
+
     );
 
 }
 
 const styles = StyleSheet.create({
-    container:{
+    main: {
+        flex: 1,
+        justifyContent: 'center',
+        marginHorizontal: '5%',
+    },
+    header:{
+        color: '#115273',
+        fontSize: 24,
+        fontWeight: '600',
+        alignSelf: 'center',
+        marginBottom: 10,
+    },
+    container: {
         padding: 20,
-        backgroundColor: '#fff',
-        borderRadius: 10,
+        backgroundColor: '#115273',
+        borderRadius: 15,
         shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2},
-        shadowOpacity: 0.25,
+        shadowOffset: { width: 2, height: 2 },
+        shadowOpacity: 0.5,
         shadowRadius: 3.84,
         elevation: 5,
+    },
+    inputHeader: {
+        color: 'white',
+        fontSize: 18,
+        fontWeight: 'medium',
+        marginBottom: 5,
     },
     input: {
         height: 40,
         borderColor: '#ccc',
+        backgroundColor: 'white',
+        borderRadius: 15,
         borderWidth: 1,
-        marginBottom: 10,
+        marginBottom: 20,
         paddingHorizontal: 10,
-    }
+
+        shadowColor: 'black',
+        shadowOffset: {
+            width: 5,
+            height: 3,
+        },
+        shadowOpacity: 0.2,
+        shadowRadius: 4,
+
+        // Android shadow
+        elevation: 5,
+    },
+    submitButton: {
+        borderRadius: 15,
+        backgroundColor: '#115273',
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginHorizontal: '20%',
+        marginTop: 20,
+        padding: 5,
+        height: 40,
+    },
+    buttonText: {
+        color: 'white',
+        fontWeight: 'bold',
+        fontSize: 18,
+    },
 });
 
 export default AddForm;

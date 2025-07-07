@@ -15,7 +15,18 @@ export default function App() {
   const Stack = createNativeStackNavigator();
 
   return (
-    <SQLiteProvider databaseName="words.db">
+    <SQLiteProvider  databaseName="words.db"
+      onInit={async (db) => {
+        await db.execAsync(`
+            CREATE TABLE IF NOT EXISTS words (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            en TEXT NOT NULL,
+            tr TEXT NOT NULL
+            );
+            PRAGMA journal_mode=WAL;
+            `)
+      }}
+      options={{ useNewConnections: false }}>
 
       <NavigationContainer>
         <Stack.Navigator>

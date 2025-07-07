@@ -5,47 +5,55 @@ import { SQLiteProvider } from 'expo-sqlite';
 import { useNavigation } from '@react-navigation/native';
 export default function AddWordScreen() {
   const navigation = useNavigation();
-        const homeButtonHandler = () =>{
-            navigation.navigate('HomeScreen');
-        }
+  const homeButtonHandler = () => {
+    navigation.navigate('HomeScreen');
+  }
   return (
-    <SQLiteProvider
-      databaseName="words.db"
-      onInit={async (db) => {
-        await db.execAsync(`
-            CREATE TABLE IF NOT EXISTS words (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            en TEXT NOT NULL,
-            tr TEXT NOT NULL
-            );
-            PRAGMA journal_mode=WAL;
-            `)
-      }}
-      options={{ useNewConnections: false }}
-    >
-      <AddForm />
+    <View style={styles.container}>
       <TouchableOpacity style={styles.homeButton} onPress={homeButtonHandler}>
-        <Text style={styles.buttonText}>HOME</Text>
+        <Text style={styles.homeButtonText}>X</Text>
       </TouchableOpacity>
-    </SQLiteProvider>
+      <AddForm />
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-   buttonText:{
+  container:{
+    flex: 1,
+  },
+  buttonText: {
     color: 'white',
-    
+
     fontSize: 20,
-  },  
+  },
+  homeButtonText: {
+    color: 'white',
+    fontWeight: 'bold',
+    fontSize: 20,
+  },
   homeButton: {
 
+
     position: 'absolute',
-    bottom: '10%',
-    alignSelf: 'center',
+    right: 20,
+    top: '20%',
     alignItems: 'center',
+    justifyContent: 'center',
     backgroundColor: '#115273',
-    width: '40%',
+    width: 40,
+    height: 40,
     padding: 5,
-    borderRadius: 14,
+    borderRadius: 50,
+
+
+    // iOS Shadow
+    shadowColor: '#000000',
+    shadowOffset: { width: 5, height: 5 },
+    shadowOpacity: 1,
+    shadowRadius: 3.84,
+
+    // Android Shadow
+    elevation: 5,
   },
 })
