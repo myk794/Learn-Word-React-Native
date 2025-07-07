@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Button,TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, Button, TouchableOpacity } from 'react-native';
 import Swiper from 'react-native-deck-swiper';
 import { useState, useEffect, useRef, useLayoutEffect } from 'react';
 import React from 'react'
@@ -28,10 +28,10 @@ export default function LearnScreen() {
 
   const [counter, setCounter] = useState(0);
 
-   const navigation = useNavigation();
-      const homeButtonHandler = () =>{
-          navigation.navigate('HomeScreen');
-      }
+  const navigation = useNavigation();
+  const homeButtonHandler = () => {
+    navigation.navigate('HomeScreen');
+  }
   useLayoutEffect(() => {
     async function fetchWords() {
       const result = await db.getAllAsync(`SELECT * FROM words`);
@@ -108,46 +108,48 @@ export default function LearnScreen() {
     };
   }
   return (
-   
 
-    
+
+
     <View style={styles.container}>
 
       <Text style={styles.infoText}>swipe left or right</Text>
+      <View style={styles.swiper}>
+        <Swiper
+          cards={words}
+          ref={swiperRef}
+          renderCard={(item, cardIndex) => {
+            return (
+              <View style={styles.card}>
+                <Text style={styles.text}>{item.en}</Text>
+                <Text style={styles.nextWord}>{words[cardIndex + 1 === words.length ? 0 : cardIndex + 1]?.en ?? "?"}</Text>
+                <Text style={styles.nextWord}>{words[cardIndex + 2 === words.length ? 0 : cardIndex + 2]?.en ?? "?"}</Text>
+                <Text style={styles.nextWord}>{words[cardIndex + 3 === words.length ? 0 : cardIndex + 3]?.en ?? "?"}</Text>
+                <Text style={styles.nextWord}>{words[cardIndex + 4 === words.length ? 0 : cardIndex + 4]?.en ?? "?"}</Text>
+                <Text style={styles.nextWord}>{words[cardIndex + 5 === words.length ? 0 : cardIndex + 5]?.en ?? "?"}</Text>
+                <Text style={styles.nextWord}>{words[cardIndex + 6 === words.length ? 0 : cardIndex + 6]?.en ?? "?"}</Text>
+                <LinearGradient
+                  // Background Linear Gradient
+                  colors={['transparent', '#115273']}
+                  style={styles.gradientOverlay}
+                />
+              </View>
+            )
+          }}
+          keyExtractor={(item) => item.id.toString()}
+          verticalSwipe={false}
+          onSwiped={() => { setCounter(counter + 1) }}
+          onSwipedLeft={(cardIndex) => { onSwipedLeft(words[cardIndex + 1]) }}
+          onSwipedRight={(cardIndex) => { onSwipedRight(words[cardIndex + 1]) }}
+          onSwipedAll={() => { console.log("All cards swiped!") }}
+          cardIndex={0}
+          backgroundColor={'#FFFFFF'}
+          infinite={true}
+          stackSize={4}>
 
-      <Swiper
-        cards={words}
-        ref={swiperRef}
-        renderCard={(item, cardIndex) => {
-          return (
-            <View style={styles.card}>
-              <Text style={styles.text}>{item.en}</Text>
-              <Text style={styles.nextWord}>{words[cardIndex + 1 === words.length ? 0 : cardIndex + 1]?.en ?? "?"}</Text>
-              <Text style={styles.nextWord}>{words[cardIndex + 2 === words.length ? 0 : cardIndex + 2]?.en ?? "?"}</Text>
-              <Text style={styles.nextWord}>{words[cardIndex + 3 === words.length ? 0 : cardIndex + 3]?.en ?? "?"}</Text>
-              <Text style={styles.nextWord}>{words[cardIndex + 4 === words.length ? 0 : cardIndex + 4]?.en ?? "?"}</Text>
-              <Text style={styles.nextWord}>{words[cardIndex + 5 === words.length ? 0 : cardIndex + 5]?.en ?? "?"}</Text>
-              <Text style={styles.nextWord}>{words[cardIndex + 6 === words.length ? 0 : cardIndex + 6]?.en ?? "?"}</Text>
-              <LinearGradient
-                // Background Linear Gradient
-                colors={['transparent', '#115273']}
-                style={styles.gradientOverlay}
-              />
-            </View>
-          )
-        }}
-        keyExtractor={(item) => item.id.toString()}
-        verticalSwipe={false}
-        onSwiped={() => { setCounter(counter + 1) }}
-        onSwipedLeft={(cardIndex) => { onSwipedLeft(words[cardIndex + 1]) }}
-        onSwipedRight={(cardIndex) => { onSwipedRight(words[cardIndex + 1]) }}
-        onSwipedAll={() => { console.log("All cards swiped!") }}
-        cardIndex={0}
-        backgroundColor={'#FFFFFF'}
-        infinite={true}
-        stackSize={4}>
+        </Swiper>
+      </View>
 
-      </Swiper>
       <Text style={styles.yourScoreHeader}>Your Score</Text>
       <Text style={styles.score}>{score}</Text>
       <Text style={styles.infoText}>swipe left or right</Text>
@@ -166,20 +168,23 @@ export default function LearnScreen() {
         <Text style={styles.buttonText}>HOME</Text>
       </TouchableOpacity>
     </View>
-    
+
   )
 }
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: 'red',
+    backgroundColor: 'white',
     flex: 1,
   },
-  buttonText:{
-    color: 'white',
+  swiper:{
     
+  },
+  buttonText: {
+    color: 'white',
+
     fontSize: 20,
-  },  
+  },
   homeButton: {
 
     position: 'absolute',
@@ -195,8 +200,7 @@ const styles = StyleSheet.create({
 
     width: 200,
     height: 300,
-
-    marginTop: 'auto',
+    marginTop: '50%',
     borderRadius: 42,
     alignSelf: "center",
     backgroundColor: "#115273",
