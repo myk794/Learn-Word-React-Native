@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View, TouchableOpacity, Modal,Button} from 'react-native'
 import React from 'react'
-import { useNavigation } from '@react-navigation/native';
+import { NavigationRouteContext, useNavigation } from '@react-navigation/native';
 import { useLayoutEffect, useState } from 'react';
 import { BlurView } from 'expo-blur';
 import { useSQLiteContext } from 'expo-sqlite';
@@ -20,6 +20,9 @@ export default function HomeScreen() {
     }
     const addWordHandler = () => {
         navigation.navigate('AddWordScreen');
+    }
+    const goWordList = () => {
+        navigation.navigate('WordListScreen');
     }
     useLayoutEffect(() => {
         async function fetchWords() {
@@ -59,6 +62,10 @@ export default function HomeScreen() {
 
             <TouchableOpacity style={styles.playButton} onPress={addWordHandler}>
                 <Text style={styles.buttonText}>ADD WORD</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.totalWordsButton} onPress={goWordList}>
+
+            <Text style={styles.totalWordsText}>You have {totalWords} words</Text>
             </TouchableOpacity>
         </View>
     )
@@ -136,5 +143,16 @@ const styles = StyleSheet.create({
         fontSize: 24,
         fontWeight: '600',
         textAlign: 'center',
+    },
+    totalWordsText:{
+        color: 'white',
+        textDecorationLine: 'underline',
+        alignSelf: 'center',
+    },
+    totalWordsButton:{
+         position: 'absolute',
+        bottom: '7%',
+        alignSelf: 'center',
+
     },
 })
