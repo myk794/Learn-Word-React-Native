@@ -21,13 +21,13 @@ const styles = StyleSheet.create({
   container:{
     width: '90%',
     borderColor: 'rgb(17, 82, 115)',
-    borderWidth: 3,
+    borderWidth: 4,
     flexDirection: 'row',
     alignSelf: 'center',
     marginVertical: 10,
-    padding: 0,
     borderRadius: 10,
-    backgroundColor: 'white'
+    backgroundColor: 'white',
+    justifyContent: 'center'
   },
   button: {
     backgroundColor: 'rgb(17, 82, 115)',
@@ -37,6 +37,7 @@ const styles = StyleSheet.create({
     marginLeft: 'auto',
     width: '16%',
     alignItems: 'center',
+
   },
   
   textMiddle:{

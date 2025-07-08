@@ -8,7 +8,7 @@ import { useNavigation } from '@react-navigation/native';
 import Toast, { BaseToast, ErrorToast } from 'react-native-toast-message';
 export default function WordListScreen() {
   const navigation = useNavigation();
-  const [words, setWords] = useState()
+  const [words, setWords] = useState([])
 
   const db = useSQLiteContext();
 

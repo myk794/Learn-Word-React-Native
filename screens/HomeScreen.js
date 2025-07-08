@@ -28,7 +28,7 @@ export default function HomeScreen() {
         async function fetchWords() {
             const result = await db.getAllAsync(`SELECT * FROM words`);
             await setTotalWords(result.length);
-
+            
         }
 
         fetchWords();
