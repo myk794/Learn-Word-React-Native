@@ -4,100 +4,134 @@
   <img src="./assets/screenshots/AddWordScreen.png" width="200" style="border: 2px solid #ccc; border-radius: 8px;" />
   <img src="./assets/screenshots/WarningScreen.png" width="200" style="border: 2px solid #ccc; border-radius: 8px;" />
 </p>
-## Learn-Word-React-Native
 
-### Architecture Overview
-The `Learn-Word-React-Native` application is a mobile application designed to help users learn words in different languages. The application is built using React Native and leverages several libraries and tools to provide a seamless user experience.
+# Learn-Word-React-Native
 
-### Key Components
-- **React Native**: The core framework for building the mobile application.
-- **Expo**: A framework and platform for universal React applications.
-- **React Navigation**: A popular library for managing navigation in React Native applications.
-- **SQLite**: A lightweight disk-based database that stores the words to be learned.
-- **Expo SQLite**: A library to interact with SQLite databases in Expo projects.
-- **Expo Status Bar**: A component to display the status bar.
-- **Expo Blur**: A library to create blur effects.
-- **Expo Linear Gradient**: A library to create linear gradients.
-- **React Native Deck Swiper**: A library to create a deck swiper component.
-- **React Native Safe Area Context**: A library to handle safe areas on iOS devices.
-- **React Native Screens**: A library to optimize the rendering of screens.
-- **React Native Toast Message**: A library to display toast messages.
+## 🚀 Overview
+Learn-Word-React-Native is an interactive app designed to help users learn words in different languages. This app leverages the power of React Native to provide a seamless and engaging learning experience. Whether you're a language learner or a teacher, this app offers a fun and effective way to expand your vocabulary.
 
-### Setup & Installation
-To set up and install the `Learn-Word-React-Native` application, follow these steps:
+### Key Features:
+- **Interactive Word Learning**: Swipe through words to learn and test your knowledge.
+- **Add Words**: Easily add new words to your vocabulary.
+- **Word List**: View and manage your list of learned words.
+- **User-Friendly Interface**: Intuitive design for a smooth user experience.
 
-1. **Clone the Repository**
-   ```sh
-   git clone https://github.com/yourusername/Learn-Word-React-Native.git
-   cd Learn-Word-React-Native
-   ```
+### Who This Project Is For:
+- Language learners
+- Teachers and educators
+- Anyone looking to expand their vocabulary
 
-2. **Install Dependencies**
-   ```sh
-   npm install
-   ```
+## ✨ Features
+- 📚 **Word Learning**: Swipe through words to learn and test your knowledge.
+- 📝 **Add Words**: Easily add new words to your vocabulary.
+- 📋 **Word List**: View and manage your list of learned words.
+- 🎨 **User-Friendly Interface**: Intuitive design for a smooth user experience.
 
-3. **Start the Application**
-   ```sh
-   npm start
-   ```
+## 🛠️ Tech Stack
+- **Programming Language**: JavaScript
+- **Frameworks and Libraries**:
+  - React Native
+  - React Navigation
+  - Expo
+  - SQLite
+  - Lodash
+  - React Native Deck Swiper
+  - React Native Linear Gradient
+  - React Native Safe Area Context
+  - React Native Screens
+  - React Native Toast Message
+- **Tools**:
+  - Babel
+  - EAS (Expo Application Services)
 
-### API Documentation
-The application does not use any external APIs. All data is stored locally using SQLite.
+## 📦 Installation
 
-### Database Schema
-The application uses an SQLite database to store the words. The schema for the `words` table is as follows:
+### Prerequisites
+- Node.js (v14 or later)
+- Expo CLI
+- React Native CLI (optional)
 
-```sql
-CREATE TABLE IF NOT EXISTS words (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    en TEXT NOT NULL,
-    tr TEXT NOT NULL
-);
+### Quick Start
+```bash
+# Clone the repository
+git clone https://github.com/yourusername/Learn-Word-React-Native.git
+
+# Navigate to the project directory
+cd Learn-Word-React-Native
+
+# Install dependencies
+npm install
+
+# Start the app
+npm start
 ```
 
-### Configuration
-The configuration for the application is managed through the `app.json` file. Key configurations include:
+### Alternative Installation Methods
+- **Using Expo CLI**:
+  ```bash
+  expo start
+  ```
 
-- **Name**: The name of the application.
-- **Version**: The version of the application.
-- **Orientation**: The orientation of the application.
-- **Icon**: The icon of the application.
-- **User Interface Style**: The user interface style of the application.
-- **Splash Screen**: The splash screen configuration.
-- **Asset Bundle Patterns**: The patterns for asset bundling.
-- **iOS and Android Configurations**: Specific configurations for iOS and Android platforms.
+- **Using React Native CLI**:
+  ```bash
+  npx react-native run-android
+  npx react-native run-ios
+  ```
 
-### Development Guidelines
-- **Code Style**: Follow the Airbnb JavaScript Style Guide.
-- **Version Control**: Use Git for version control.
-- **Testing**: Write unit tests for critical components.
-- **Documentation**: Keep the documentation up-to-date.
+## 🎯 Usage
 
-### Deployment Instructions
-To deploy the application, follow these steps:
+### Basic Usage
+```javascript
+// Import necessary components
+import React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import HomeScreen from './screens/HomeScreen';
+import LearnScreen from './screens/learnScreen';
+import AddWordScreen from './screens/AddWordScreen';
+import WordListScreen from './screens/WordListScreen';
+import { SQLiteProvider } from 'expo-sqlite';
 
-1. **Build the Application**
-   ```sh
-   expo build:android
-   expo build:ios
-   ```
+// Main App Component
+export default function App() {
+  const Stack = createNativeStackNavigator();
 
-2. **Upload to App Stores**
-   - **Android**: Upload the APK to the Google Play Store.
-   - **iOS**: Upload the IPA to the Apple App Store.
+  return (
+    <SQLiteProvider databaseName="words.db" onInit={async (db) => {
+      await db.execAsync(`
+        CREATE TABLE IF NOT EXISTS words (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          en TEXT NOT NULL,
+          tr TEXT NOT NULL
+        );
+        PRAGMA journal_mode=WAL;
+      `)
+    }} options={{ useNewConnections: false }}>
+      <NavigationContainer>
+        <Stack.Navigator>
+          <Stack.Screen name="HomeScreen" component={HomeScreen} options={{ headerShown: false }} />
+          <Stack.Screen name="LearnScreen" component={LearnScreen} options={{ headerShown: false }} />
+          <Stack.Screen name="AddWordScreen" component={AddWordScreen} options={{ headerShown: false }} />
+          <Stack.Screen name="WordListScreen" component={WordListScreen} options={{ headerShown: false }} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </SQLiteProvider>
+  );
+}
+```
 
-### File Structure
-```plaintext
+### Advanced Usage
+- **Adding Words**:
+  ```javascript
+  // Example of adding a new word
+  const addWord = async (en, tr) => {
+    await db.runAsync('INSERT INTO words (en, tr) VALUES (?, ?)', [en, tr]);
+  };
+  ```
+
+## 📁 Project Structure
+```
 Learn-Word-React-Native/
-├── .gitignore
-├── app.json
-├── babel.config.js
-├── eas.json
-├── package.json
-├── package-lock.json
-├── README.md
-├── App.js
 ├── assets/
 │   ├── icon.png
 │   ├── splash.png
@@ -113,8 +147,76 @@ Learn-Word-React-Native/
 │   ├── HomeScreen.js
 │   ├── learnScreen.js
 │   └── WordListScreen.js
-└── node_modules/
+├── App.js
+├── app.json
+├── babel.config.js
+├── eas.json
+├── package.json
+├── package-lock.json
+└── README.md
 ```
 
-### Conclusion
-The `Learn-Word-React-Native` application is a comprehensive tool for learning words in different languages. With its modular architecture and use of modern libraries, it provides a robust and user-friendly experience.
+## 🔧 Configuration
+- **Environment Variables**: None required.
+- **Configuration Files**: `app.json` and `eas.json` are used for configuration.
+
+## 🤝 Contributing
+We welcome contributions! Here's how you can get started:
+
+### Development Setup
+1. **Clone the Repository**:
+   ```bash
+   git clone https://github.com/yourusername/Learn-Word-React-Native.git
+   cd Learn-Word-React-Native
+   ```
+
+2. **Install Dependencies**:
+   ```bash
+   npm install
+   ```
+
+3. **Start the App**:
+   ```bash
+   npm start
+   ```
+
+### Code Style Guidelines
+- Follow the standard JavaScript and React Native coding conventions.
+- Use consistent indentation and formatting.
+
+### Pull Request Process
+1. Fork the repository.
+2. Create a new branch for your feature or bug fix.
+3. Make your changes and commit them.
+4. Push your branch to your fork.
+5. Open a pull request.
+
+## 📝 License
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 👥 Authors & Contributors
+- **Maintainers**: [Your Name]
+- **Contributors**: [List of contributors]
+
+## 🐛 Issues & Support
+- **Report Issues**: Open an issue on the [GitHub Issues page](https://github.com/yourusername/Learn-Word-React-Native/issues).
+- **Get Help**: Join the [Discussion Forum](https://github.com/yourusername/Learn-Word-React-Native/discussions).
+
+## 🗺️ Roadmap
+- **Planned Features**:
+  - Add support for multiple languages.
+  - Implement a scoring system.
+  - Add user authentication.
+- **Known Issues**:
+  - [Issue 1](https://github.com/yourusername/Learn-Word-React-Native/issues/1)
+  - [Issue 2](https://github.com/yourusername/Learn-Word-React-Native/issues/2)
+- **Future Improvements**:
+  - Improve UI/UX.
+  - Add more interactive features.
+
+---
+
+**Badges**:
+[![Build Status](https://travis-ci.com/yourusername/Learn-Word-React-Native.svg?branch=main)](https://travis-ci.com/yourusername/Learn-Word-React-Native)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![GitHub stars](https://img.shields.io/github/stars/yourusername/Learn-Word-React-Native?style=social)](https://github.com/yourusername/Learn-Word-React-Native/stargazers)
