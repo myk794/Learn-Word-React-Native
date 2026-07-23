@@ -17,5 +17,5 @@ web-build/
 .metro-health-check*
 
 # EAS build logs/outputs (yerel, repoya girmemeli)
-build-err.log
-build-out.json
+build-err*.log
+build-out*.json
