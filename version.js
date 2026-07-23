@@ -5,4 +5,4 @@
 // OTA_REVISION: her OTA yayininda (eas update) MUTLAKA +1 artir. Telefonda
 //               "1.0.2-4" gibi gorunur; sayi artmissa OTA inmis demektir.
 export const APP_VERSION = '1.0.2';
-export const OTA_REVISION = 5;
+export const OTA_REVISION = 6;

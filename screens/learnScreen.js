@@ -135,7 +135,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   swiper:{
-    marginTop: '35%',
+    marginTop: '50%',
   },
   buttonText: {
     color: 'white',
