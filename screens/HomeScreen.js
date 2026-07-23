@@ -4,6 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 import { useLayoutEffect, useState } from 'react';
 import { BlurView } from 'expo-blur';
 import useWords from '../hooks/useWords';
+import { APP_VERSION, OTA_REVISION } from '../version';
 export default function HomeScreen() {
     const { count: totalWords, refresh } = useWords();
     const navigation = useNavigation();
@@ -66,6 +67,7 @@ export default function HomeScreen() {
 
             <Text style={styles.totalWordsText}>You have {totalWords} words</Text>
             </TouchableOpacity>
+            <Text style={styles.versionText}>v{APP_VERSION}-{OTA_REVISION}</Text>
         </View>
     )
 }
@@ -153,5 +155,12 @@ const styles = StyleSheet.create({
         bottom: '7%',
         alignSelf: 'center',
 
+    },
+    versionText:{
+        position: 'absolute',
+        bottom: 8,
+        right: 12,
+        color: 'rgba(255,255,255,0.6)',
+        fontSize: 12,
     },
 })
