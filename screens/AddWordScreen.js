@@ -1,7 +1,6 @@
-import { Button, StyleSheet, Text, View, TouchableOpacity } from 'react-native'
+import { StyleSheet, Text, View, TouchableOpacity } from 'react-native'
 import React from 'react'
 import AddForm from './components/AddForm';
-import { SQLiteProvider } from 'expo-sqlite';
 import { useNavigation } from '@react-navigation/native';
 export default function AddWordScreen() {
   const navigation = useNavigation();

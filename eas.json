@@ -5,19 +5,8 @@
         "buildType": "apk"
       }
     },
-    "preview2": {
-      "android": {
-        "gradleCommand": ":app:assembleRelease"
-      }
-    },
-    "preview3": {
-      "developmentClient": true
-    },
-    "preview4": {
-      "distribution": "internal"
-    },
     "production": {
-      "android":{
+      "android": {
         "buildType": "app-bundle"
       }
     }

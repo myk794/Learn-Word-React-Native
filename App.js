@@ -1,6 +1,3 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Button } from 'react-native';
-import Swiper from 'react-native-deck-swiper';
 import AddWordScreen from './screens/AddWordScreen';
 
 import LearnScreen from './screens/learnScreen';
@@ -44,6 +41,3 @@ export default function App() {
 
   );
 }
-const styles = StyleSheet.create({
-
-});

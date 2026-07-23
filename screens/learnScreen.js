@@ -1,29 +1,19 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Button, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import Swiper from 'react-native-deck-swiper';
 import { useState, useEffect, useRef, useLayoutEffect } from 'react';
 import React from 'react'
-import { useSQLiteContext } from 'expo-sqlite';
 import { LinearGradient } from 'expo-linear-gradient';
-import HomeButton from './components/HomeButton';
 import { useNavigation } from '@react-navigation/native';
+import useWords from '../hooks/useWords';
 export default function LearnScreen() {
-  const db = useSQLiteContext();
+  const { words, refresh } = useWords();
   const swiperRef = useRef(null);
-  const [words, setWords] = useState([{ "en": "phone", "id": 1, "tr": "telefon" },
-  { "en": "bag", "id": 2, "tr": "çanta" },
-  { "en": "cup", "id": 3, "tr": "bardak" },
-  { "en": "keyboard", "id": 4, "tr": "klavye" },
-  { "en": "frame", "id": 5, "tr": "çerçeve" },
-  { "en": "mouse", "id": 6, "tr": "fare" },
-  { "en": "mother", "id": 7, "tr": "anne" },
-  { "en": "glass", "id": 8, "tr": "cam" }]);
   const [score, setScore] = useState(0);
-  const [leftText, setLeftText] = useState("araba");
-  const [rightText, setRightText] = useState("bilgisayar");
+  const [leftText, setLeftText] = useState('');
+  const [rightText, setRightText] = useState('');
 
-  const [randomWord, setRandomWord] = useState('test_random');
-  const [correctWord, setCorrectWord] = useState('test_correct');
+  const [randomWord, setRandomWord] = useState('');
+  const [correctWord, setCorrectWord] = useState('');
   const [correctDirection, setCorrectDirection] = useState("left");
 
   const [counter, setCounter] = useState(0);
@@ -33,59 +23,51 @@ export default function LearnScreen() {
     navigation.navigate('HomeScreen');
   }
   useLayoutEffect(() => {
-    async function fetchWords() {
-      const result = await db.getAllAsync(`SELECT * FROM words`);
-      await setWords(result);
-    }
-
-    fetchWords();
-
-  }, [])
+    refresh();
+  }, [refresh])
   useEffect(() => {
-    setWordsTexts(words[0]);
-
+    if (words.length > 0) {
+      setWordsTexts(words[0]);
+    }
   }, [words])
   function onSwipedLeft(word) {
     if (correctDirection === "left") {
-      console.log("CORRECT!");
-      setScore(score + 1);
-
+      setScore(prev => prev + 1);
     }
     setWordsTexts(word);
-    console.log("Swiped Left!");
   }
   function onSwipedRight(word) {
-
     if (correctDirection === "right") {
-      console.log("CORRECT!");
-      setScore(score + 1);
-
+      setScore(prev => prev + 1);
     }
     setWordsTexts(word);
-    console.log("Swiped Right");
-
   }
-  async function setWordsTexts(word) {
-    const answers = await getWordAnswers(word);
+  function setWordsTexts(word) {
+    const answers = getWordAnswers(word);
+    if (answers.error) {
+      return;
+    }
 
-
-    await setRandomWord(answers.random);
-    await setCorrectWord(answers.correct);
+    setRandomWord(answers.random);
+    setCorrectWord(answers.correct);
 
     // 0: left --- 1:right
     const direction = Math.round(Math.random());
     if (direction === 0) {
-      await setCorrectDirection("left");
-      await setLeftText(answers.correct);
-      await setRightText(answers.random);
+      setCorrectDirection("left");
+      setLeftText(answers.correct);
+      setRightText(answers.random);
     }
     else {
-      await setCorrectDirection("right");
-      await setLeftText(answers.random);
-      await setRightText(answers.correct);
+      setCorrectDirection("right");
+      setLeftText(answers.random);
+      setRightText(answers.correct);
     }
   }
   function getWordAnswers(word) {
+    if (!word) {
+      return { error: "Kelime bulunamadı." };
+    }
 
     const targetWord = words.find(word1 => word1.id === word.id);
 

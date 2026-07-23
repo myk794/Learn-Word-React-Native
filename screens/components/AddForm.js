@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { View, TextInput, Button, StyleSheet, Alert, TouchableOpacity, Text } from 'react-native';
-import { useSQLiteContext } from 'expo-sqlite';
+import { View, TextInput, StyleSheet, Alert, TouchableOpacity, Text } from 'react-native';
+import useWords from '../../hooks/useWords';
 
 const AddForm = () => {
     const [form, setForm] = useState({
@@ -8,16 +8,13 @@ const AddForm = () => {
         tr: ''
     });
 
-    const db = useSQLiteContext();
+    const { addWord } = useWords();
     const handleSubmit = async () => {
         try {
             if (!form.en || !form.tr) {
                 throw new Error('All fields are required!');
             }
-            await db.runAsync(
-                'INSERT INTO words (en,tr) VALUES (?,?)',
-                [form.en, form.tr]
-            );
+            await addWord(form.en, form.tr);
             Alert.alert('Success', 'Word Added Successfully!');
             setForm({
                 en: '',
@@ -83,7 +80,7 @@ const styles = StyleSheet.create({
     inputHeader: {
         color: 'white',
         fontSize: 18,
-        fontWeight: 'medium',
+        fontWeight: '500',
         marginBottom: 5,
     },
     input: {

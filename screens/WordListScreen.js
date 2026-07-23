@@ -1,21 +1,17 @@
 import { StyleSheet, Text, View, FlatList, TouchableOpacity } from 'react-native'
 import React from 'react'
-import { useLayoutEffect, useState } from 'react'
+import { useLayoutEffect } from 'react'
 import WordBlock from './components/WordBlock';
-import { useSQLiteContext } from 'expo-sqlite';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { useNavigation } from '@react-navigation/native';
-import Toast, { BaseToast, ErrorToast } from 'react-native-toast-message';
+import Toast, { BaseToast } from 'react-native-toast-message';
+import useWords from '../hooks/useWords';
 export default function WordListScreen() {
   const navigation = useNavigation();
-  const [words, setWords] = useState([])
+  const { words, refresh, deleteWord } = useWords();
 
-  const db = useSQLiteContext();
-
-  const deleteWord = async (id) => {
-    await db.runAsync(`DELETE FROM words WHERE id = ?`, [id]);
-    const updated = await db.getAllAsync(`SELECT * FROM words`);
-    setWords(updated);
+  const handleDelete = async (id) => {
+    await deleteWord(id);
     Toast.show({
       type: 'customInfo',
       text1: 'Deleted item!',
@@ -36,15 +32,8 @@ export default function WordListScreen() {
     ),
   };
   useLayoutEffect(() => {
-    async function fetchWords() {
-      const result = await db.getAllAsync(`SELECT * FROM words`);
-      await setWords(result);
-
-    }
-
-    fetchWords();
-
-  }, []);
+    refresh();
+  }, [refresh]);
   const backButtonHandler = () => {
     navigation.navigate('HomeScreen');
   }
@@ -61,8 +50,8 @@ export default function WordListScreen() {
       </View>
       {words.length === 0 ? (<Text style={styles.noWord}>You have no words.</Text>) : (<FlatList
         data={words}
-        renderItem={({ item }) => <WordBlock tr={item.tr} en={item.en} onDelete={() => deleteWord(item.id)} />}
-        keyExtractor={item => item.id} />)}
+        renderItem={({ item }) => <WordBlock tr={item.tr} en={item.en} onDelete={() => handleDelete(item.id)} />}
+        keyExtractor={item => item.id.toString()} />)}
       
       <Toast config={toastConfig} />
     </View>
@@ -91,7 +80,7 @@ const styles = StyleSheet.create({
   headerText: {
     color: 'rgb(17, 82, 115)',
     fontSize: 20,
-    fontWeight: 600,
+    fontWeight: '600',
     alignSelf: 'center',
     textAlign: 'center',
     marginLeft: 10,

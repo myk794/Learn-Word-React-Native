@@ -1,12 +1,11 @@
 import { StyleSheet, Text, View, TouchableOpacity, Modal,Button} from 'react-native'
 import React from 'react'
-import { NavigationRouteContext, useNavigation } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import { useLayoutEffect, useState } from 'react';
 import { BlurView } from 'expo-blur';
-import { useSQLiteContext } from 'expo-sqlite';
+import useWords from '../hooks/useWords';
 export default function HomeScreen() {
-    const db = useSQLiteContext();
-    const [totalWords, setTotalWords] = useState(0)
+    const { count: totalWords, refresh } = useWords();
     const navigation = useNavigation();
     const [modalVisible, setModalVisible] = useState(false);
     const playButtonHandler = () => {
@@ -25,15 +24,8 @@ export default function HomeScreen() {
         navigation.navigate('WordListScreen');
     }
     useLayoutEffect(() => {
-        async function fetchWords() {
-            const result = await db.getAllAsync(`SELECT * FROM words`);
-            await setTotalWords(result.length);
-            
-        }
-
-        fetchWords();
-
-    }, [])
+        refresh();
+    }, [refresh])
     return (
         <View style={styles.container}>
             <Modal
@@ -79,7 +71,7 @@ const styles = StyleSheet.create({
     },
     header: {
         color: 'white',
-        fontWeight: 'medium',
+        fontWeight: '500',
         fontSize: 40,
         alignSelf: 'center',
         top: '5%',
