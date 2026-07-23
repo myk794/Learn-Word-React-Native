@@ -66,15 +66,15 @@ export default function SwipeDeck({ cards, renderCard, onSwipeLeft, onSwipeRight
     outputRange: ['-28deg', '0deg', '28deg'],
   });
 
-  // On karti kaydirdikca hemen arkadaki kart one dogru buyur.
+  // On karti kaydirdikca hemen arkadaki kart one dogru gelir (asagidan yukari).
   const nextScale = position.x.interpolate({
     inputRange: [-SWIPE_THRESHOLD, 0, SWIPE_THRESHOLD],
-    outputRange: [1, 0.94, 1],
+    outputRange: [1, 0.95, 1],
     extrapolate: 'clamp',
   });
   const nextTranslateY = position.x.interpolate({
     inputRange: [-SWIPE_THRESHOLD, 0, SWIPE_THRESHOLD],
-    outputRange: [0, 12, 0],
+    outputRange: [0, 26, 0],
     extrapolate: 'clamp',
   });
 
@@ -114,8 +114,8 @@ export default function SwipeDeck({ cards, renderCard, onSwipeLeft, onSwipeRight
           </Animated.View>
         );
       } else {
-        const scale = 1 - depth * 0.06;
-        const translateY = depth * 12;
+        const scale = 1 - depth * 0.05;
+        const translateY = depth * 26;
         items.push(
           <Animated.View
             key={`depth${depth}`}
@@ -134,7 +134,7 @@ export default function SwipeDeck({ cards, renderCard, onSwipeLeft, onSwipeRight
 
 const styles = StyleSheet.create({
   container: {
-    height: 380,
+    height: 440,
     alignItems: 'center',
     justifyContent: 'center',
   },
