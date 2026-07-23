@@ -97,13 +97,14 @@ export default function LearnScreen() {
 
       <Text style={styles.infoText}>swipe left or right</Text>
       <View style={styles.swiper}>
+        {words.length > 0 && (
         <Swiper
           cards={words}
           ref={swiperRef}
           renderCard={(item, cardIndex) => {
             return (
               <View style={styles.card}>
-                <Text style={styles.text}>{item.en}</Text>
+                <Text style={styles.text}>{item?.en ?? "?"}</Text>
                 <Text style={styles.nextWord}>{words[cardIndex + 1 === words.length ? 0 : cardIndex + 1]?.en ?? "?"}</Text>
                 <Text style={styles.nextWord}>{words[cardIndex + 2 === words.length ? 0 : cardIndex + 2]?.en ?? "?"}</Text>
                 <Text style={styles.nextWord}>{words[cardIndex + 3 === words.length ? 0 : cardIndex + 3]?.en ?? "?"}</Text>
@@ -118,7 +119,7 @@ export default function LearnScreen() {
               </View>
             )
           }}
-          keyExtractor={(item) => item.id.toString()}
+          keyExtractor={(item) => item?.id?.toString() ?? "0"}
           verticalSwipe={false}
           onSwiped={() => { setCounter(counter + 1) }}
           onSwipedLeft={(cardIndex) => { onSwipedLeft(words[cardIndex + 1]) }}
@@ -130,6 +131,7 @@ export default function LearnScreen() {
           stackSize={4}>
 
         </Swiper>
+        )}
       </View>
 
       <Text style={styles.yourScoreHeader}>Your Score</Text>
