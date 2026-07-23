@@ -1,13 +1,11 @@
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
-import Swiper from 'react-native-deck-swiper';
-import { useState, useEffect, useRef, useLayoutEffect } from 'react';
+import { useState, useEffect, useLayoutEffect } from 'react';
 import React from 'react'
-import { LinearGradient } from 'expo-linear-gradient';
 import { useNavigation } from '@react-navigation/native';
 import useWords from '../hooks/useWords';
+import SwipeDeck from './components/SwipeDeck';
 export default function LearnScreen() {
   const { words, refresh } = useWords();
-  const swiperRef = useRef(null);
   const [score, setScore] = useState(0);
   const [leftText, setLeftText] = useState('');
   const [rightText, setRightText] = useState('');
@@ -15,11 +13,6 @@ export default function LearnScreen() {
   const [randomWord, setRandomWord] = useState('');
   const [correctWord, setCorrectWord] = useState('');
   const [correctDirection, setCorrectDirection] = useState("left");
-
-  const [counter, setCounter] = useState(0);
-  // Deste bitince Swiper'i remount edip bastan baslatmak icin (deck-swiper'in
-  // infinite modu bug'li: bir tur sonra kartlar kayboluyor).
-  const [deckKey, setDeckKey] = useState(0);
 
   const navigation = useNavigation();
   const homeButtonHandler = () => {
@@ -101,40 +94,16 @@ export default function LearnScreen() {
       <Text style={styles.infoText}>swipe left or right</Text>
       <View style={styles.swiper}>
         {words.length > 0 && (
-        <Swiper
-          key={deckKey}
-          cards={words}
-          ref={swiperRef}
-          renderCard={(item, cardIndex) => {
-            return (
+          <SwipeDeck
+            cards={words}
+            onSwipeLeft={(nextCard) => onSwipedLeft(nextCard)}
+            onSwipeRight={(nextCard) => onSwipedRight(nextCard)}
+            renderCard={(item) => (
               <View style={styles.card}>
                 <Text style={styles.text}>{item?.en ?? "?"}</Text>
-                <Text style={styles.nextWord}>{words[cardIndex + 1 === words.length ? 0 : cardIndex + 1]?.en ?? "?"}</Text>
-                <Text style={styles.nextWord}>{words[cardIndex + 2 === words.length ? 0 : cardIndex + 2]?.en ?? "?"}</Text>
-                <Text style={styles.nextWord}>{words[cardIndex + 3 === words.length ? 0 : cardIndex + 3]?.en ?? "?"}</Text>
-                <Text style={styles.nextWord}>{words[cardIndex + 4 === words.length ? 0 : cardIndex + 4]?.en ?? "?"}</Text>
-                <Text style={styles.nextWord}>{words[cardIndex + 5 === words.length ? 0 : cardIndex + 5]?.en ?? "?"}</Text>
-                <Text style={styles.nextWord}>{words[cardIndex + 6 === words.length ? 0 : cardIndex + 6]?.en ?? "?"}</Text>
-                <LinearGradient
-                  // Background Linear Gradient
-                  colors={['transparent', '#115273']}
-                  style={styles.gradientOverlay}
-                />
               </View>
-            )
-          }}
-          keyExtractor={(item) => item?.id?.toString() ?? "0"}
-          verticalSwipe={false}
-          onSwiped={() => { setCounter(counter + 1) }}
-          onSwipedLeft={(cardIndex) => { onSwipedLeft(words[cardIndex + 1]) }}
-          onSwipedRight={(cardIndex) => { onSwipedRight(words[cardIndex + 1]) }}
-          onSwipedAll={() => { setWordsTexts(words[0]); setDeckKey((k) => k + 1); }}
-          cardIndex={0}
-          backgroundColor={'#FFFFFF'}
-          infinite={false}
-          stackSize={4}>
-
-        </Swiper>
+            )}
+          />
         )}
       </View>
 
@@ -166,7 +135,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   swiper:{
-    
+    marginTop: '35%',
   },
   buttonText: {
     color: 'white',
@@ -187,13 +156,13 @@ const styles = StyleSheet.create({
     
   },
   card: {
-
-    width: 200,
+    width: 220,
     height: 300,
-    marginTop: '50%',
     borderRadius: 42,
-    alignSelf: "center",
     backgroundColor: "#115273",
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: 16,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.25,
@@ -201,28 +170,10 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   text: {
-    top: 30,
     textAlign: 'center',
-    fontSize: 24,
-    backgroundColor: "transparent",
+    fontSize: 26,
     color: "white",
     fontWeight: 'bold',
-  },
-  nextWord: {
-    top: 30,
-    textAlign: 'center',
-    fontSize: 24,
-    backgroundColor: "transparent",
-    color: "white",
-    fontWeight: 'bold',
-    opacity: 0.5,
-  },
-  gradientOverlay: {
-    position: 'absolute',
-    top: 25,
-    left: 10,
-    right: 10,
-    bottom: 25,
   },
   infoText: {
     fontSize: 14,
