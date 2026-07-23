@@ -19,3 +19,6 @@ web-build/
 # EAS build logs/outputs (yerel, repoya girmemeli)
 build-err*.log
 build-out*.json
+
+# Google Play service account anahtari - ASLA commit etme
+google-service-account.json
