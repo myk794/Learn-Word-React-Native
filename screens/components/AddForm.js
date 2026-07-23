@@ -11,10 +11,12 @@ const AddForm = () => {
     const { addWord } = useWords();
     const handleSubmit = async () => {
         try {
-            if (!form.en || !form.tr) {
+            const en = form.en.trim();
+            const tr = form.tr.trim();
+            if (!en || !tr) {
                 throw new Error('All fields are required!');
             }
-            await addWord(form.en, form.tr);
+            await addWord(en, tr);
             Alert.alert('Success', 'Word Added Successfully!');
             setForm({
                 en: '',
@@ -34,12 +36,14 @@ const AddForm = () => {
                 <TextInput
                     style={styles.input}
                     placeholder="Enter text..."
+                    maxLength={40}
                     value={form.en}
                     onChangeText={(text) => setForm({ ...form, en: text })} />
                 <Text style={styles.inputHeader}>Turkish</Text>
                 <TextInput
                     style={styles.input}
                     placeholder="Enter text..."
+                    maxLength={40}
                     value={form.tr}
                     onChangeText={(text) => setForm({ ...form, tr: text })} />
 

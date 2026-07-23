@@ -2,7 +2,7 @@
   "expo": {
     "name": "Swipe Word",
     "slug": "firstapp",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -23,7 +23,10 @@
         "backgroundColor": "#ffffff"
       },
       "package": "com.myk794.firstapp",
-      "versionCode": 2
+      "versionCode": 3,
+      "runtimeVersion": {
+        "policy": "appVersion"
+      }
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -35,6 +38,9 @@
     },
     "plugins": [
       "expo-sqlite"
-    ]
+    ],
+    "updates": {
+      "url": "https://u.expo.dev/08385558-4463-494c-bc29-188fc2fb2e2a"
+    }
   }
 }
