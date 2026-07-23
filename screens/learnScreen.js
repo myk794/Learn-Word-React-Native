@@ -2,6 +2,7 @@ import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { useState, useEffect, useLayoutEffect } from 'react';
 import React from 'react'
 import { useNavigation } from '@react-navigation/native';
+import { LinearGradient } from 'expo-linear-gradient';
 import useWords from '../hooks/useWords';
 import SwipeDeck from './components/SwipeDeck';
 export default function LearnScreen() {
@@ -101,14 +102,18 @@ export default function LearnScreen() {
             renderCard={(item, cardIdx) => (
               <View style={styles.card}>
                 <Text style={styles.text}>{item?.en ?? "?"}</Text>
-                {[1, 2, 3, 4, 5, 6, 7, 8].map((k) => {
+                {[1, 2, 3, 4, 5, 6, 7].map((k) => {
                   const w = words[(cardIdx + k) % words.length];
                   return (
-                    <Text key={k} style={[styles.nextWord, { opacity: (9 - k) / 12 }]}>
-                      {w?.en ?? ""}
-                    </Text>
+                    <Text key={k} style={styles.nextWord}>{w?.en ?? ""}</Text>
                   );
                 })}
+                <LinearGradient
+                  colors={['transparent', '#115273']}
+                  locations={[0.35, 0.95]}
+                  style={styles.fadeOverlay}
+                  pointerEvents="none"
+                />
               </View>
             )}
           />
@@ -188,10 +193,17 @@ const styles = StyleSheet.create({
   },
   nextWord: {
     textAlign: 'center',
-    fontSize: 20,
+    fontSize: 18,
     color: "white",
     fontWeight: 'bold',
-    marginTop: 3,
+    marginTop: 6,
+  },
+  fadeOverlay: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0,
   },
   infoText: {
     fontSize: 14,
