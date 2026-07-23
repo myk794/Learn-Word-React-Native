@@ -23,6 +23,9 @@ export default function HomeScreen() {
     const goWordList = () => {
         navigation.navigate('WordListScreen');
     }
+    const goWordPacks = () => {
+        navigation.navigate('WordPacksScreen');
+    }
     useLayoutEffect(() => {
         refresh();
     }, [refresh])
@@ -39,7 +42,7 @@ export default function HomeScreen() {
                 <BlurView intensity={90} tint="dark" style={styles.modalContainer}>
                     <View style={styles.modalBox}>
                         <Text style={styles.modalTitle}>UPS!</Text>
-                        <Text style={styles.modalText}>You need more than 5 words to play. Please add more words.</Text>
+                        <Text style={styles.modalText}>You need at least 5 words to play. Add a ready-made set from WORD PACKS, or add your own.</Text>
                         <TouchableOpacity style={styles.okButton} onPress={() => setModalVisible(!modalVisible)}>
                         <Text style={styles.okText}>OK</Text>
                     </TouchableOpacity>
@@ -54,6 +57,10 @@ export default function HomeScreen() {
 
             <TouchableOpacity style={styles.playButton} onPress={addWordHandler}>
                 <Text style={styles.buttonText}>ADD WORD</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity style={styles.playButton} onPress={goWordPacks}>
+                <Text style={styles.buttonText}>WORD PACKS</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.totalWordsButton} onPress={goWordList}>
 
@@ -102,7 +109,7 @@ const styles = StyleSheet.create({
     },
     modalBox:{
         width: '90%',
-        height: 200,
+        paddingBottom: 25,
         backgroundColor: 'white',
         borderRadius: 20,
     },
@@ -125,7 +132,7 @@ const styles = StyleSheet.create({
         width: '80%',
         height: 40,
         borderRadius:15,
-        marginTop: 50,
+        marginTop: 25,
         backgroundColor: '#115273',
         alignSelf: 'center',
         justifyContent: 'center',

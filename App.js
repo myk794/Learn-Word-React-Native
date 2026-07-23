@@ -6,6 +6,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import HomeScreen from './screens/HomeScreen';
 import WordListScreen from './screens/WordListScreen';
+import WordPacksScreen from './screens/WordPacksScreen';
 
 
 export default function App() {
@@ -32,6 +33,7 @@ export default function App() {
           <Stack.Screen name="LearnScreen" component={LearnScreen}  options={{ headerShown: false }}/>
           <Stack.Screen name="AddWordScreen" component={AddWordScreen}  options={{ headerShown: false }}/>
           <Stack.Screen name="WordListScreen" component={WordListScreen}  options={{ headerShown: false }}/>
+          <Stack.Screen name="WordPacksScreen" component={WordPacksScreen}  options={{ headerShown: false }}/>
         </Stack.Navigator>
       </NavigationContainer>
     </SQLiteProvider>

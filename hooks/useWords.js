@@ -29,5 +29,30 @@ export default function useWords() {
     [db, refresh]
   );
 
-  return { words, count: words.length, refresh, addWord, deleteWord };
+  // Bir kelime paketini toplu ekler; mevcut kelimeleri (en, buyuk/kucuk harf
+  // duyarsiz) atlar. Gercekten eklenen kelime sayisini dondurur.
+  const addWords = useCallback(
+    async (list) => {
+      const existing = await db.getAllAsync('SELECT en FROM words');
+      const existingSet = new Set(
+        existing.map((w) => w.en.trim().toLowerCase())
+      );
+      const toInsert = list.filter(
+        (w) => !existingSet.has(w.en.trim().toLowerCase())
+      );
+      await db.withTransactionAsync(async () => {
+        for (const w of toInsert) {
+          await db.runAsync('INSERT INTO words (en, tr) VALUES (?, ?)', [
+            w.en.trim(),
+            w.tr.trim(),
+          ]);
+        }
+      });
+      await refresh();
+      return toInsert.length;
+    },
+    [db, refresh]
+  );
+
+  return { words, count: words.length, refresh, addWord, addWords, deleteWord };
 }
