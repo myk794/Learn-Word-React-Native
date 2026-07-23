@@ -45,7 +45,7 @@ export default function WordListScreen() {
 
         <Text style={styles.headerText}>Word List</Text>
         <TouchableOpacity style={styles.backButton} onPress={backButtonHandler}>
-          <AntDesign name="back" size={24} color="white" />
+          <AntDesign name="left" size={24} color="white" />
         </TouchableOpacity>
       </View>
       {words.length === 0 ? (<Text style={styles.noWord}>You have no words.</Text>) : (<FlatList
