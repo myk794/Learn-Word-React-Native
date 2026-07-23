@@ -98,7 +98,7 @@ export default function SwipeDeck({ cards, renderCard, onSwipeLeft, onSwipeRight
             ]}
             {...panResponder.panHandlers}
           >
-            {renderCard(card)}
+            {renderCard(card, cardIdx)}
           </Animated.View>
         );
       } else if (depth === 1) {
@@ -110,7 +110,7 @@ export default function SwipeDeck({ cards, renderCard, onSwipeLeft, onSwipeRight
               { transform: [{ scale: nextScale }, { translateY: nextTranslateY }] },
             ]}
           >
-            {renderCard(card)}
+            {renderCard(card, cardIdx)}
           </Animated.View>
         );
       } else {
@@ -121,7 +121,7 @@ export default function SwipeDeck({ cards, renderCard, onSwipeLeft, onSwipeRight
             key={`depth${depth}`}
             style={[styles.cardWrapper, { transform: [{ scale }, { translateY }] }]}
           >
-            {renderCard(card)}
+            {renderCard(card, cardIdx)}
           </Animated.View>
         );
       }

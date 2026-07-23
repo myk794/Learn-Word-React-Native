@@ -85,7 +85,7 @@ export default function WordPacksScreen() {
             <View style={styles.packInfo}>
               <Text style={styles.packName}>{item.name}</Text>
               <Text style={styles.packDesc}>{item.description}</Text>
-              <Text style={styles.packCount}>{item.words.length} kelime · goster</Text>
+              <Text style={styles.packCount}>{item.words.length} kelime · göster</Text>
             </View>
             {renderAddButton(item, false)}
           </TouchableOpacity>

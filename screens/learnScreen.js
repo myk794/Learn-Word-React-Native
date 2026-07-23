@@ -98,9 +98,17 @@ export default function LearnScreen() {
             cards={words}
             onSwipeLeft={(nextCard) => onSwipedLeft(nextCard)}
             onSwipeRight={(nextCard) => onSwipedRight(nextCard)}
-            renderCard={(item) => (
+            renderCard={(item, cardIdx) => (
               <View style={styles.card}>
                 <Text style={styles.text}>{item?.en ?? "?"}</Text>
+                {[1, 2, 3, 4, 5, 6, 7, 8].map((k) => {
+                  const w = words[(cardIdx + k) % words.length];
+                  return (
+                    <Text key={k} style={[styles.nextWord, { opacity: (9 - k) / 12 }]}>
+                      {w?.en ?? ""}
+                    </Text>
+                  );
+                })}
               </View>
             )}
           />
@@ -161,8 +169,10 @@ const styles = StyleSheet.create({
     borderRadius: 42,
     backgroundColor: "#115273",
     alignItems: 'center',
-    justifyContent: 'center',
-    paddingHorizontal: 16,
+    justifyContent: 'flex-start',
+    paddingTop: 22,
+    paddingHorizontal: 12,
+    overflow: 'hidden',
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.25,
@@ -174,6 +184,14 @@ const styles = StyleSheet.create({
     fontSize: 26,
     color: "white",
     fontWeight: 'bold',
+    marginBottom: 8,
+  },
+  nextWord: {
+    textAlign: 'center',
+    fontSize: 20,
+    color: "white",
+    fontWeight: 'bold',
+    marginTop: 3,
   },
   infoText: {
     fontSize: 14,
