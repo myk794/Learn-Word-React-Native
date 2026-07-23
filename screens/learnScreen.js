@@ -17,6 +17,9 @@ export default function LearnScreen() {
   const [correctDirection, setCorrectDirection] = useState("left");
 
   const [counter, setCounter] = useState(0);
+  // Deste bitince Swiper'i remount edip bastan baslatmak icin (deck-swiper'in
+  // infinite modu bug'li: bir tur sonra kartlar kayboluyor).
+  const [deckKey, setDeckKey] = useState(0);
 
   const navigation = useNavigation();
   const homeButtonHandler = () => {
@@ -99,6 +102,7 @@ export default function LearnScreen() {
       <View style={styles.swiper}>
         {words.length > 0 && (
         <Swiper
+          key={deckKey}
           cards={words}
           ref={swiperRef}
           renderCard={(item, cardIndex) => {
@@ -124,10 +128,10 @@ export default function LearnScreen() {
           onSwiped={() => { setCounter(counter + 1) }}
           onSwipedLeft={(cardIndex) => { onSwipedLeft(words[cardIndex + 1]) }}
           onSwipedRight={(cardIndex) => { onSwipedRight(words[cardIndex + 1]) }}
-          onSwipedAll={() => { console.log("All cards swiped!") }}
+          onSwipedAll={() => { setWordsTexts(words[0]); setDeckKey((k) => k + 1); }}
           cardIndex={0}
           backgroundColor={'#FFFFFF'}
-          infinite={true}
+          infinite={false}
           stackSize={4}>
 
         </Swiper>
